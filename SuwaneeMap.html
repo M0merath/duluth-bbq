@@ -20,7 +20,11 @@
     }
 
 	#map {
-		height: 100%;
+		bottom:0px;
+        height: 100%;
+        left: 362px;
+        position: absolute;
+        right: 0px;
 	}
 
 	.options-box {
@@ -39,14 +43,14 @@
 <body>
 
 <!-- The listings sidebar -->
-<!--<div class="container">
+	<div class="container">
       <div class="options-box">
-        <h1>Discover Korean BBQ in Downtown Suwanee</h1>
+        <h2>Discover Korean BBQ in Downtown Suwanee</h2>
         <div>
           <input id="show-listings" type="button" value="Show Listings">
           <input id="hide-listings" type="button" value="Hide Listings">
         </div>
-      </div>-->
+      </div>
 <!-- The map -->
 	<div id="map"></div>
 	<script type="text/javascript">
@@ -92,7 +96,12 @@
           		// Push the marker to our array of markers.
           		markers.push(marker);
      			}
-     			showListings();
+     			
+     		showListings();
+
+     		// Sidebar buttons to 'show' and 'hide' markers.
+     		document.getElementById('show-listings').addEventListener('click', showListings);
+        	document.getElementById('hide-listings').addEventListener('click', hideListings);
   			}
 
 		function showListings() {
