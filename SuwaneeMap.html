@@ -20,13 +20,32 @@
 	<script type="text/javascript">
 		// Create a Google Map variable
 		var map;
+		// Create an empty array of markers
+		var markers = [];
 		// Initialize the map within the div
 		function initMap() {
 			map = new google.maps.Map(document.getElementById('map'), {
-				center: {lat: 34.056818, lng: -84.064526},
+				center: {lat: 33.958681, lng: -84.1363947},
 				zoom: 15
 			});
+			var myungGaWon = {lat: 33.9598642, lng: -84.1378528};
+        	var marker = new google.maps.Marker({
+          	position: myungGaWon,
+          	map: map,
+          	title: 'First Marker!'
+        	});
 		}
+		// An array of Korean BBQ restaurants.
+		var restaurants = [
+          {title: 'Myung Ga Won', location: {lat: 33.9598642, lng: -84.1378528}},
+          //{title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
+          //{title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}},
+          //{title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}},
+          //{title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
+          //{title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
+        ];
+        
+
 	</script>
 
 	<!-- Call the Google Maps API. -->
