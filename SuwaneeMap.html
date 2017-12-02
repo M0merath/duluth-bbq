@@ -102,12 +102,14 @@
      		for (var i = 0; i < restaurants.length; i++) {
           		// Create a listing per restaurant, and add it to the sidebar.
           		restaurant = restaurants[i].title;
-          		var newItem = document.createElement("LI");
+          		var newItem = document.createElement("br");
+          		var listButton = document.createElement("button");
+          		listButton.setAttribute("onclick", "selectOne(i)");
      			var textnode = document.createTextNode(restaurant);
-     			newItem.appendChild(textnode);
-
+     			listButton.appendChild(textnode);
      			var sidebar = document.getElementById("sidebar");
      			sidebar.insertBefore(newItem, sidebar.childNodes[i]);
+     			sidebar.insertBefore(listButton, sidebar.childNodes[i]);
      			}
 
      			
@@ -134,6 +136,18 @@
         	for (var i = 0; i < markers.length; i++) {
           	markers[i].setMap(null);
         	}
+      	}
+
+      	function selectOne(selection) {
+      		for (var i = 0; i < markers.length; i++) {
+      			if (markers[i].title != selection) {
+      				markers[i].setMap(null);
+      			} else {
+      				markers[i].setMap(map);
+      				bounds.extend(markers[i].position);
+      			}
+      			map.fitBounds(bounds);
+      		}
       	}
 
 	</script>
