@@ -102,14 +102,14 @@
      		for (var i = 0; i < restaurants.length; i++) {
           		// Create a listing per restaurant, and add it to the sidebar.
           		restaurant = restaurants[i].title;
-          		var newItem = document.createElement("br");
+          		var newListing = document.createElement("div");
           		var listButton = document.createElement("button");
           		listButton.setAttribute("onclick", "selectOne(i)");
      			var textnode = document.createTextNode(restaurant);
      			listButton.appendChild(textnode);
+     			newListing.appendChild(listButton);
      			var sidebar = document.getElementById("sidebar");
-     			sidebar.insertBefore(newItem, sidebar.childNodes[i]);
-     			sidebar.insertBefore(listButton, sidebar.childNodes[i]);
+     			sidebar.insertBefore(newListing, sidebar.childNodes[i]);
      			}
 
      			
