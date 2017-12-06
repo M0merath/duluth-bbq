@@ -101,10 +101,11 @@
 
      		for (var i = 0; i < restaurants.length; i++) {
           		// Create a listing per restaurant, and add it to the sidebar.
-          		restaurant = restaurants[i].title;
+          		restaurant = markers[i].title;
+          		restNum = i;
           		var newListing = document.createElement("div");
           		var listButton = document.createElement("button");
-          		listButton.setAttribute("onclick", "selectOne(i)");
+          		listButton.setAttribute("onclick", "selectOne(" + restNum + ")");
      			var textnode = document.createTextNode(restaurant);
      			listButton.appendChild(textnode);
      			newListing.appendChild(listButton);
@@ -139,16 +140,10 @@
       	}
 
       	function selectOne(selection) {
-      		for (var i = 0; i < markers.length; i++) {
-      			if (markers[i].title != selection) {
-      				markers[i].setMap(null);
-      			} else {
-      				markers[i].setMap(map);
-      				bounds.extend(markers[i].position);
-      			}
-      			map.fitBounds(bounds);
+      		google.maps.event.trigger(map, "resize");
+			map.panTo(markers[selection].getPosition());
+			map.setZoom(16);
       		}
-      	}
 
 	</script>
 
