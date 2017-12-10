@@ -81,6 +81,7 @@
           		{title: 'JM BBQ & Bar', location: {lat: 33.960409, lng: -84.134025}}
         	];
         
+        var largeInfowindow = new google.maps.InfoWindow();
         //var defaultIcon = makeMarkerIcon('0091ff');
 
 			for (var i = 0; i < restaurants.length; i++) {
@@ -97,7 +98,10 @@
           		});
           		// Push the marker to our array of markers.
           		markers.push(marker);
-     			}
+          		marker.addListener('click', function() {
+            		populateInfoWindow(this, largeInfowindow);
+          		});
+          		}
 
      		for (var i = 0; i < restaurants.length; i++) {
           		// Create a listing per restaurant, and add it to the sidebar.
@@ -116,6 +120,40 @@
      			
      			
      		showListings();
+     		
+     		var contentString = '<div id="content">'+
+            '<div id="siteNotice">'+
+            '</div>'+
+            '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+            '<div id="bodyContent">'+
+            '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+            'sandstone rock formation in the southern part of the '+
+            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+            'south west of the nearest large town, Alice Springs; 450&#160;km '+
+            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+            'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+            'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+            'Aboriginal people of the area. It has many springs, waterholes, '+
+            'rock caves and ancient paintings. Uluru is listed as a World '+
+            'Heritage Site.</p>'+
+            '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+            'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+            '(last visited June 22, 2009).</p>'+
+            '</div>'+
+            '</div>';
+
+        var testwindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+        var testmarker = new google.maps.Marker({
+          position: {lat: 33.958681, lng: -84.1363947},
+          map: map,
+          title: 'Uluru (Ayers Rock)'
+        });
+        testmarker.addListener('click', function() {
+          testwindow.open(map, testmarker);
+        });
 
      		// Sidebar buttons to 'show' and 'hide' markers.
      		document.getElementById('show-listings').addEventListener('click', showListings);
@@ -145,11 +183,28 @@
 			map.setZoom(16);
       		}
 
+      	
+      	//function populateInfoWindow(marker, infowindow) {
+        // Check to make sure the infowindow is not already opened on this marker.
+        //if (infowindow.marker != marker) {
+          // Clear the infowindow content to give the streetview time to load.
+         // infowindow.setContent('');
+          //infowindow.marker = marker;
+          // Make sure the marker property is cleared if the infowindow is closed.
+          //infowindow.addListener('closeclick', function() {
+            //infowindow.marker = null;
+          	//});
+          //function getFoursquare(data, status) {
+          	
+          //}
+		//}
+	//}
 	</script>
 
 	<!-- Call the Google Maps API. -->
 	<script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCK9oBT1vADTLkfMwPTxYxrrScY-kJEQHs&libraries=geometry&callback=initMap">
 	</script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+	<script src="js/libs/jquery.min.js"></script>
 	</body>
 </html>
