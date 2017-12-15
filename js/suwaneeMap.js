@@ -22,47 +22,70 @@
           		{title: 'Song Do BBQ', location: {lat: 33.957229, lng: -84.135552}},
           		{title: 'JM BBQ & Bar', location: {lat: 33.960409, lng: -84.134025}}
         	];
+
+
+      var largeInfowindow = new google.maps.InfoWindow();
+      //var defaultIcon = makeMarkerIcon('0091ff');
+
+      function populateRestaurants (query) {
+        $.getJSON(query, function(data) {
+          var results = data.response.venues;
+          for (var i = 0; i < results.length; i++) {
+            var result = results[i];
+            var position = result.location;
+            var title = result.name;
+            var marker = new google.maps.Marker({
+              position: position,
+              title: title,
+              animation: google.maps.Animation.DROP,
+              id: i
+            });
+            markers.push(marker);
+            marker.addListener('click', function() {
+              populateInforWindow(this, largeInfowindow);
+            });
+          }
+          for (var i = 0; i < results.length; i++) {
+            // Create a listing per restaurant, and add it to the sidebar.
+            restaurant = markers[i].title;
+            restNum = i;
+            var newListing = document.createElement("div");
+            var listButton = document.createElement("button");
+            listButton.setAttribute("onclick", "selectOne(" + restNum + ")");
+            var textnode = document.createTextNode(restaurant);
+            listButton.appendChild(textnode);
+            newListing.appendChild(listButton);
+            var sidebar = document.getElementById("sidebar");
+            sidebar.insertBefore(newListing, sidebar.childNodes[i]);
+            } 
+        }) 
+      }
+
         
-        var largeInfowindow = new google.maps.InfoWindow();
-        //var defaultIcon = makeMarkerIcon('0091ff');
+     
 
-			for (var i = 0; i < restaurants.length; i++) {
-          		// Get the position from the location array.
-          		var position = restaurants[i].location;
-          		var title = restaurants[i].title;
-          		// Create a marker per location, and put into markers array.
-          		var marker = new google.maps.Marker({
-            	position: position,
-            	title: title,
-            	animation: google.maps.Animation.DROP,
-            	//icon: defaultIcon,
-            	id: i
-          		});
+			//for (var i = 0; i < restaurants.length; i++) {
+      //    		// Get the position from the location array.
+      //    		var position = restaurants[i].location;
+      //    		var title = restaurants[i].title;
+      //    		// Create a marker per location, and put into markers array.
+      //    		var marker = new google.maps.Marker({
+      //      	position: position,
+      //      	title: title,
+      //      	animation: google.maps.Animation.DROP,
+      //      	//icon: defaultIcon,
+      //      	id: i
+      //    		});
           		// Push the marker to our array of markers.
-          		markers.push(marker);
-          		marker.addListener('click', function() {
-            		populateInfoWindow(this, largeInfowindow);
-          		});
-          		}
+      //    		markers.push(marker);
+      //    		marker.addListener('click', function() {
+      //      		populateInfoWindow(this, largeInfowindow);
+      //    		});
+       //   		}
 
-     		for (var i = 0; i < restaurants.length; i++) {
-          		// Create a listing per restaurant, and add it to the sidebar.
-          		restaurant = markers[i].title;
-          		restNum = i;
-          		var newListing = document.createElement("div");
-          		var listButton = document.createElement("button");
-          		listButton.setAttribute("onclick", "selectOne(" + restNum + ")");
-     			var textnode = document.createTextNode(restaurant);
-     			listButton.appendChild(textnode);
-     			newListing.appendChild(listButton);
-     			var sidebar = document.getElementById("sidebar");
-     			sidebar.insertBefore(newListing, sidebar.childNodes[i]);
-     			}
+     		populateRestaurants('https://api.foursquare.com/v2/venues/search?v=20161016&ll=33.958681%2C%20-84.1363947&radius=2000&query=Korean%20BBQ&limit=5&intent=browse&client_id=SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE&client_secret=QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR')
+        showListings();
 
-     			
-     			
-     		showListings();
-     		
      		var contentString = '<div id="content">'+
             '<div id="siteNotice">'+
             '</div>'+
