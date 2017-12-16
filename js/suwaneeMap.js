@@ -28,6 +28,7 @@
       //var defaultIcon = makeMarkerIcon('0091ff');
 
       function populateRestaurants (query) {
+        // Using Foursquare, place 5 markers matching query.
         $.getJSON(query, function(data) {
           var results = data.response.venues;
           for (var i = 0; i < results.length; i++) {
@@ -42,7 +43,7 @@
             });
             markers.push(marker);
             marker.addListener('click', function() {
-              populateInforWindow(this, largeInfowindow);
+              populateInfoWindow(this, largeInfowindow);
             });
           }
           for (var i = 0; i < results.length; i++) {
@@ -143,22 +144,26 @@
       	}
 
       	function selectOne(selection) {
-      		google.maps.event.trigger(map, "resize");
-			map.panTo(markers[selection].getPosition());
-			map.setZoom(16);
-      		}
+      	 google.maps.event.trigger(map, "resize");
+			   map.panTo(markers[selection].getPosition());
+			   map.setZoom(16);
+      	}
 
       	
-      	//function populateInfoWindow(marker, infowindow) {
+      	function populateInfoWindow(marker, infowindow) {
         // Check to make sure the infowindow is not already opened on this marker.
-        //if (infowindow.marker != marker) {
+          if (infowindow.marker != marker) {
           // Clear the infowindow content to give the streetview time to load.
-         // infowindow.setContent('');
-          //infowindow.marker = marker;
-          // Make sure the marker property is cleared if the infowindow is closed.
-          //infowindow.addListener('closeclick', function() {
-            //infowindow.marker = null;
-          	//});
+            infowindow.setContent('Hello');
+            infowindow.marker = marker;
+            // Make sure the marker property is cleared if the infowindow is closed.
+            infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+          	});
+            //infowindow.setContent('<div' + marker.position + '</div');
+            infowindow.open(map, marker);
+          }
+        }
           //function getFoursquare(data, status) {
           	
           //}
