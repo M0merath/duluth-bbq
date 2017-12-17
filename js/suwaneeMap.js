@@ -2,6 +2,9 @@
 		var map;
 		// Create an empty array of markers
 		var markers = [];
+    // Store the Foursqare client ID and secret for future reference
+    var client_id = 'SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE';
+    var client_secret = 'QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR';
 		// Initialize the map within the div
 		function initMap() {
 			map = new google.maps.Map(document.getElementById('map'), {
@@ -35,11 +38,13 @@
             var result = results[i];
             var position = result.location;
             var title = result.name;
+            var foursquareID = result.id;
             var marker = new google.maps.Marker({
               position: position,
               title: title,
               animation: google.maps.Animation.DROP,
-              id: i
+              id: i,
+              foursquareID: foursquareID
             });
             markers.push(marker);
             marker.addListener('click', function() {
@@ -59,7 +64,7 @@
             var sidebar = document.getElementById("sidebar");
             sidebar.insertBefore(newListing, sidebar.childNodes[i]);
             } 
-        }) 
+        }); 
       }
 
         
@@ -124,7 +129,7 @@
      		// Sidebar buttons to 'show' and 'hide' markers.
      		document.getElementById('show-listings').addEventListener('click', showListings);
         	document.getElementById('hide-listings').addEventListener('click', hideListings);
-  			}
+  	}
 
 		function showListings() {
         	var bounds = new google.maps.LatLngBounds();
@@ -160,12 +165,16 @@
             infowindow.addListener('closeclick', function() {
             infowindow.marker = null;
           	});
-            //infowindow.setContent('<div' + marker.position + '</div');
+            // Let Foursquare query this specific venue, for more detailed results.
+            function foursquareVenue(id) {
+              var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
+              $.getJSON(foursquareURL, function(data) {
+                var results = data.response.venue;
+                infowindow.setContent('<div>' + results.name + '</div>' + '<div>' + 'Rating: ' + results.rating + '</div>');
+              });
+            }
+            foursquareVenue(marker.foursquareID);
+            // Stop here!
+            }
             infowindow.open(map, marker);
           }
-        }
-          //function getFoursquare(data, status) {
-          	
-          //}
-		//}
-	//}

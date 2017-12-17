@@ -1,0 +1,20 @@
+Foursquare Photos
+https://api.foursquare.com/v2/venues/588638c3266c11339c3c4905/photos?v=20161016&client_id=SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE&client_secret=QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR
+
+Specific Photo Address
+https://igx.4sqi.net/img/general/300x600/27884563_hpMyWa6CRpel2LjuC0t4U56inW3u_0Mm4rgHsHLqEhw.jpg
+
+Focus on a specific venue:
+https://api.foursquare.com/v2/venues/588638c3266c11339c3c4905?v=20161016&client_id=SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE&client_secret=QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR
+
+Infowindow:
+Name (bold)
+Rating (corner)
+Price ($$$$)
+Photo (best; thumbnail)
+Address
+Phone
+
+
+
+
