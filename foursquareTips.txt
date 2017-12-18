@@ -9,7 +9,8 @@ https://api.foursquare.com/v2/venues/588638c3266c11339c3c4905?v=20161016&client_
 
 Infowindow:
 Name (bold)
-Rating (corner)
+Rating (corner)exit
+
 Price ($$$$)
 Photo (best; thumbnail)
 Address
@@ -18,3 +19,4 @@ Phone
 
 
 
+https:\/\/igx.4sqi.net\/img\/general\/720x960\/39833006_qkSonSNyAK7_OCHfHs0teedRSmOosxu0bWQMGm8Vd94.jpg

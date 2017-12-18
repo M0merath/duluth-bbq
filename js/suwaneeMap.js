@@ -67,32 +67,10 @@
         }); 
       }
 
-        
-     
+     	populateRestaurants('https://api.foursquare.com/v2/venues/search?v=20161016&ll=33.958681%2C%20-84.1363947&radius=2000&query=Korean%20BBQ&limit=5&intent=browse&client_id=SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE&client_secret=QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR')
+      showListings();
 
-			//for (var i = 0; i < restaurants.length; i++) {
-      //    		// Get the position from the location array.
-      //    		var position = restaurants[i].location;
-      //    		var title = restaurants[i].title;
-      //    		// Create a marker per location, and put into markers array.
-      //    		var marker = new google.maps.Marker({
-      //      	position: position,
-      //      	title: title,
-      //      	animation: google.maps.Animation.DROP,
-      //      	//icon: defaultIcon,
-      //      	id: i
-      //    		});
-          		// Push the marker to our array of markers.
-      //    		markers.push(marker);
-      //    		marker.addListener('click', function() {
-      //      		populateInfoWindow(this, largeInfowindow);
-      //    		});
-       //   		}
-
-     		populateRestaurants('https://api.foursquare.com/v2/venues/search?v=20161016&ll=33.958681%2C%20-84.1363947&radius=2000&query=Korean%20BBQ&limit=5&intent=browse&client_id=SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE&client_secret=QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR')
-        showListings();
-
-     		var contentString = '<div id="content">'+
+     	var contentString = '<div id="content">'+
             '<div id="siteNotice">'+
             '</div>'+
             '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
@@ -113,68 +91,67 @@
             '</div>'+
             '</div>';
 
-        var testwindow = new google.maps.InfoWindow({
-          content: contentString
-        });
+      var testwindow = new google.maps.InfoWindow({
+        content: contentString
+      });
 
-        var testmarker = new google.maps.Marker({
-          position: {lat: 33.958681, lng: -84.1363947},
-          map: map,
-          title: 'Uluru (Ayers Rock)'
-        });
-        testmarker.addListener('click', function() {
-          testwindow.open(map, testmarker);
-        });
+      var testmarker = new google.maps.Marker({
+        position: {lat: 33.958681, lng: -84.1363947},
+        map: map,
+        title: 'Uluru (Ayers Rock)'
+      });
+      testmarker.addListener('click', function() {
+        testwindow.open(map, testmarker);
+      });
 
-     		// Sidebar buttons to 'show' and 'hide' markers.
-     		document.getElementById('show-listings').addEventListener('click', showListings);
-        	document.getElementById('hide-listings').addEventListener('click', hideListings);
+     	// Sidebar buttons to 'show' and 'hide' markers.
+     	document.getElementById('show-listings').addEventListener('click', showListings);
+      document.getElementById('hide-listings').addEventListener('click', hideListings);
   	}
 
 		function showListings() {
-        	var bounds = new google.maps.LatLngBounds();
-        	// Extend the boundaries of the map for each marker and display the marker
-        	for (var i = 0; i < markers.length; i++) {
-          		markers[i].setMap(map);
-          		bounds.extend(markers[i].position);
-        		}
-        	map.fitBounds(bounds);
-      		}
+      var bounds = new google.maps.LatLngBounds();
+      // Extend the boundaries of the map for each marker and display the marker
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+        bounds.extend(markers[i].position);
+      }
+      map.fitBounds(bounds);
+    }
 
-      	// This function will loop through the listings and hide them all.
-      	function hideListings() {
-        	for (var i = 0; i < markers.length; i++) {
-          	markers[i].setMap(null);
-        	}
-      	}
+    // This function will loop through the listings and hide them all.
+    function hideListings() {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    }
+  }
 
-      	function selectOne(selection) {
-      	 google.maps.event.trigger(map, "resize");
-			   map.panTo(markers[selection].getPosition());
-			   map.setZoom(16);
-      	}
+  function selectOne(selection) {
+    google.maps.event.trigger(map, "resize");
+			map.panTo(markers[selection].getPosition());
+			map.setZoom(16);
+    }
 
       	
-      	function populateInfoWindow(marker, infowindow) {
-        // Check to make sure the infowindow is not already opened on this marker.
-          if (infowindow.marker != marker) {
-          // Clear the infowindow content to give the streetview time to load.
-            infowindow.setContent('Hello');
-            infowindow.marker = marker;
-            // Make sure the marker property is cleared if the infowindow is closed.
-            infowindow.addListener('closeclick', function() {
-            infowindow.marker = null;
-          	});
-            // Let Foursquare query this specific venue, for more detailed results.
-            function foursquareVenue(id) {
-              var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
-              $.getJSON(foursquareURL, function(data) {
-                var results = data.response.venue;
-                infowindow.setContent('<div>' + results.name + '</div>' + '<div>' + 'Rating: ' + results.rating + '</div>');
-              });
-            }
-            foursquareVenue(marker.foursquareID);
-            // Stop here!
-            }
-            infowindow.open(map, marker);
-          }
+    function populateInfoWindow(marker, infowindow) {
+    // Check to make sure the infowindow is not already opened on this marker.
+    if (infowindow.marker != marker) {
+      // Clear the infowindow content to give the streetview time to load.
+      infowindow.setContent('');
+      infowindow.marker = marker;
+      // Make sure the marker property is cleared if the infowindow is closed.
+      infowindow.addListener('closeclick', function() {
+        infowindow.marker = null;
+      });
+      // Let Foursquare query this specific venue, for more detailed results.
+      function foursquareVenue(id) {
+        var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
+        $.getJSON(foursquareURL, function(data) {
+          var results = data.response.venue;
+          infowindow.setContent('<div>' + results.name + '</div>' + '<div>' + 'Rating: ' + results.rating + '</div>' + '<div>' + 'Price: ' + results.price.tier + '</div>' + '<div>' + '<img src="' + results.bestPhoto.prefix + 'width100' + results.bestPhoto.suffix + '"></div>' + '<div>' + results.location.formattedAddress + '</div>' + '<div>' + results.contact.formattedPhone + '</div>');
+        });
+      }
+      foursquareVenue(marker.foursquareID);
+    }
+    infowindow.open(map, marker);
+  }
