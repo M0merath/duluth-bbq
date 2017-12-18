@@ -148,7 +148,19 @@
         var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
         $.getJSON(foursquareURL, function(data) {
           var results = data.response.venue;
-          infowindow.setContent('<div>' + results.name + '</div>' + '<div>' + 'Rating: ' + results.rating + '</div>' + '<div>' + 'Price: ' + results.price.tier + '</div>' + '<div>' + '<img src="' + results.bestPhoto.prefix + 'width100' + results.bestPhoto.suffix + '"></div>' + '<div>' + results.location.formattedAddress + '</div>' + '<div>' + results.contact.formattedPhone + '</div>');
+          infowindow.setContent(
+            '<div>' + 
+              '<div style="width: 105px; float: left; display: inline-block;">' + 
+                '<span>' + '<img src="' + results.bestPhoto.prefix + 'width100' + results.bestPhoto.suffix + '"></span>' + 
+              '</div>' + 
+              '<div style="width: 200px; float: left; display: inline-block">' + 
+                '<span>' + '<strong>' + results.name + '</strong></span><br>' + 
+                '<span>' + '<strong>Rating: </strong>' + results.rating + '</span>' + '&emsp;' +  
+                '<span>' + '<strong>Price: </strong>' + results.price.tier + '</span><br>' + 
+                '<span>' + '<strong>Address: </strong><br>' + results.location.formattedAddress + '</span><br>' + 
+                '<span>' + '<strong>Phone: </strong>' + results.contact.formattedPhone + '</span>' + 
+              '</div>' + 
+            '</div>');
         });
       }
       foursquareVenue(marker.foursquareID);
