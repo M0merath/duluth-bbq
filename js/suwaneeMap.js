@@ -148,6 +148,18 @@
         var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
         $.getJSON(foursquareURL, function(data) {
           var results = data.response.venue;
+          // Is there a listed phone number for this venue?
+          if (results.contact.formattedPhone != undefined) {
+            var phoneContact = results.contact.formattedPhone;
+          } else {
+            var phoneContact = 'none listed';
+          }
+          // Is there a rating for this venue?
+          if (results.rating != undefined) {
+            var venueRating = results.rating;
+          } else {
+            var venueRating = 'n/a';
+          }
           infowindow.setContent(
             '<div>' + 
               '<div style="width: 105px; float: left; display: inline-block;">' + 
@@ -155,10 +167,10 @@
               '</div>' + 
               '<div style="width: 200px; float: left; display: inline-block">' + 
                 '<span>' + '<strong>' + results.name + '</strong></span><br>' + 
-                '<span>' + '<strong>Rating: </strong>' + results.rating + '</span>' + '&emsp;' +  
+                '<span>' + '<strong>Rating: </strong>' + venueRating + '</span>' + '&emsp;' +  
                 '<span>' + '<strong>Price: </strong>' + results.price.tier + '</span><br>' + 
                 '<span>' + '<strong>Address: </strong><br>' + results.location.formattedAddress + '</span><br>' + 
-                '<span>' + '<strong>Phone: </strong>' + results.contact.formattedPhone + '</span>' + 
+                '<span>' + '<strong>Phone: </strong>' + phoneContact + '</span>' + 
               '</div>' + 
             '</div>');
         });
