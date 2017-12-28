@@ -1,15 +1,5 @@
 // =========== GLOBAL ===========
-// Initialize the map within the div
-function initMap() {
-	map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat: 33.958681, lng: -84.1363947},
-		zoom: 15
-	});
-	// Create an infowindow to display when a marker is clicked
-	var largeInfowindow = new google.maps.InfoWindow();
 
-	view.showListings();
-} 
 // Create a Google Map variable
 var map;
 // Create an empty array of markers
@@ -18,6 +8,25 @@ var markers = [];
 // Store the Foursqare client ID and secret for future reference
 var client_id = 'SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE';
 var client_secret = 'QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR';
+
+// Search for Korean BBQ restaurants in Duluth, GA using Foursquare
+var initialURL = 'https://api.foursquare.com/v2/venues/search?' + 
+'v=20161016&ll=33.958681%2C%20-84.1363947&radius=2000&query=Korean%20BBQ' + 
+'&limit=10&intent=browse&client_id=' + client_id + '&client_secret=' + client_secret
+
+// Initialize the map within the div
+function initMap() {
+	map = new google.maps.Map(document.getElementById('map'), {
+		center: {lat: 33.958681, lng: -84.1363947},
+		zoom: 15
+	});
+	// Create an infowindow to display when a marker is clicked
+	largeInfowindow = new google.maps.InfoWindow();
+
+	model.populateRestaurants(initialURL);
+	view.showListings();
+	view.sidebarButtons();
+}
 
 // ============ MODEL =============
 var model = {
@@ -39,7 +48,7 @@ var model = {
         });
         markers.push(marker);
         marker.addListener('click', function() {
-          populateInfoWindow(this, largeInfowindow);
+          view.prepareInfoWindow(this, largeInfowindow);
         });
       }
       for (var i = 0; i < results.length; i++) {
@@ -48,7 +57,7 @@ var model = {
         restNum = i;
         var newListing = document.createElement("div");
         var listButton = document.createElement("button");
-        listButton.setAttribute("onclick", "selectOne(" + restNum + ")");
+        listButton.setAttribute("onclick", "view.selectOne(" + restNum + ")");
         var textnode = document.createTextNode(restaurant);
         listButton.appendChild(textnode);
         newListing.appendChild(listButton);
@@ -57,7 +66,7 @@ var model = {
       } 
     }); 
   },
-  foursquareVenue: function(id) {
+  foursquareVenue: function(id, infowindow, marker) {
       var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + 
       '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
       $.getJSON(foursquareURL, function(data) {
@@ -121,6 +130,7 @@ var view = {
   		google.maps.event.trigger(map, "resize");
 		map.panTo(markers[selection].getPosition());
 		map.setZoom(16);
+		prepareInfoWindow(this, largeInfowindow);
 	},
 	
 	// Prepare the infowindow to be filled with Foursquare API data.
@@ -135,7 +145,7 @@ var view = {
       			infowindow.marker = null;
     		});
     		// *** Todo: Query Foursquare for details
-    		//foursquareVenue(marker.foursquareID);
+    		model.foursquareVenue(marker.foursquareID, infowindow, marker);
 		}
 	},
 	// Sidebar buttons to 'show' and 'hide' markers.
@@ -146,7 +156,7 @@ var view = {
 }
 
 // Initialize the map, calling Foursquare to populate restaurant listings. Enable sidebar buttons.
-var initialURL = 'https://api.foursquare.com/v2/venues/search?v=20161016&ll=33.958681%2C%20-84.1363947&radius=2000&query=Korean%20BBQ&limit=10&intent=browse&client_id=' + client_id + '&client_secret=' + client_secret
-model.populateRestaurants(initialURL);
-view.sidebarButtons();
+
+//model.populateRestaurants(initialURL);
+//view.sidebarButtons();
 
