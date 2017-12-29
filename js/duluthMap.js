@@ -24,7 +24,7 @@ function initMap() {
 	largeInfowindow = new google.maps.InfoWindow();
 
 	model.populateRestaurants(initialURL);
-	view.showListings();
+	//view.showListings();
 	view.sidebarButtons();
 }
 
@@ -46,6 +46,7 @@ var model = {
           id: i,
           foursquareID: foursquareID
         });
+        console.log(marker);
         markers.push(marker);
         marker.addListener('click', function() {
           view.prepareInfoWindow(this, largeInfowindow);
@@ -130,7 +131,6 @@ var view = {
   		google.maps.event.trigger(map, "resize");
 		map.panTo(markers[selection].getPosition());
 		map.setZoom(16);
-		prepareInfoWindow(this, largeInfowindow);
 	},
 	
 	// Prepare the infowindow to be filled with Foursquare API data.
