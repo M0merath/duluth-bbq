@@ -60,13 +60,6 @@ function initMap() {
       } 
     }); 
   }
-
-  populateRestaurants('https://api.foursquare.com/v2/venues/search?v=20161016&ll=33.958681%2C%20-84.1363947&radius=2000&query=Korean%20BBQ&limit=5&intent=browse&client_id=SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE&client_secret=QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR')
-  showListings();
-
-  // Sidebar buttons to 'show' and 'hide' markers.
-  document.getElementById('show-listings').addEventListener('click', showListings);
-  document.getElementById('hide-listings').addEventListener('click', hideListings);
 }
 
 function showListings() {

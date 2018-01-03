@@ -9,29 +9,26 @@
 
 <!-- The listings sidebar -->
 	<div class="container">
-      <div class="options-box">
-        <h2>Discover Korean BBQ in Duluth</h2>
-        <div>
-          <input id="show-listings" type="button" value="Show Listings">
-          <input id="hide-listings" type="button" value="Hide Listings">
-          <div><ul id="sidebar"></ul></div>
+    <div class="options-box">
+      <h2>Discover Korean BBQ in Duluth</h2>
+      <div>
+        <input id="show-listings" type="button" value="Show Listings">
+        <input id="hide-listings" type="button" value="Hide Listings">
+        <div class="searchbar" id="searchbar">
+          <input type="text" placeholder="Search by name" name="search" data-bind="textInput: searchEntry, valueUpdate: 'afterkeydown'">
         </div>
-        <div>
-          <form>
-            <h3>Filter by Foursquare Rating</h3>
-            <input type="radio" name="rating" value="8+" checked data-bind="checked: rating"> 8+
-            <input type="radio" name="rating" value="6+" data-bind="checked: rating"> 6+
-            <input type="radio" name="rating" value="4+" data-bind="checked: rating"> 4+
-            <input type="radio" name="rating" value="unrated" data-bind="checked: rating"> Unrated
-          </form>
+        <div class="sidebar">
+          <ul id="sidebar"></ul>
+        </div>
       </div>
+    </div>
   </div>
 <!-- The map -->
 	<div id="map"></div>
 	<script src="js/libs/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
 	<script src="js/duluthMap.js"></script>
 	<!-- Call the Google Maps API. -->
-	<script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCK9oBT1vADTLkfMwPTxYxrrScY-kJEQHs&libraries=geometry&callback=initMap"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-	</body>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCK9oBT1vADTLkfMwPTxYxrrScY-kJEQHs&libraries=geometry&callback=getStarted"></script>
+</body>
 </html>

@@ -8,15 +8,18 @@ var markers = [];
 // Store the Foursqare client ID and secret for future reference
 var client_id = 'SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE';
 var client_secret = 'QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR';
+var searchEntry = null;
 
 // Search for Korean BBQ restaurants in Duluth, GA using Foursquare
 var initialURL = 'https://api.foursquare.com/v2/venues/search?' + 
 'v=20161016&ll=33.958681%2C%20-84.1363947&radius=2000&query=Korean%20BBQ' + 
 '&limit=10&intent=browse&client_id=' + client_id + '&client_secret=' + client_secret
 
-// Initialize the map within the div
-function initMap() {
-	map = new google.maps.Map(document.getElementById('map'), {
+var viewModel = {
+  // Initialize the map within the div
+  initMap: function() {
+    searchEntry = ko.observable('');
+    map = new google.maps.Map(document.getElementById('map'), {
 		center: {lat: 33.958681, lng: -84.1363947},
 		zoom: 15
 	});
@@ -26,47 +29,51 @@ function initMap() {
 	model.populateRestaurants(initialURL);
 	//view.showListings();
 	view.sidebarButtons();
+  }
 }
 
 // ============ MODEL =============
 var model = {
+
 	populateRestaurants: function(query) {
-    // Using Foursquare, place 10 markers matching query.
-    $.getJSON(query, function(data) {
-      var results = data.response.venues;
-      for (var i = 0; i < results.length; i++) {
-        var result = results[i];
-        var position = result.location;
-        var title = result.name;
-        var foursquareID = result.id;
-        var marker = new google.maps.Marker({
-          position: position,
-          title: title,
-          animation: google.maps.Animation.DROP,
-          id: i,
-          foursquareID: foursquareID
-        });
-        console.log(marker);
-        markers.push(marker);
-        marker.addListener('click', function() {
-          view.prepareInfoWindow(this, largeInfowindow);
-        });
-      }
-      for (var i = 0; i < results.length; i++) {
-        // Create a listing per restaurant, and add it to the sidebar.
-        restaurant = markers[i].title;
-        restNum = i;
-        var newListing = document.createElement("div");
-        var listButton = document.createElement("button");
-        listButton.setAttribute("onclick", "view.selectOne(" + restNum + ")");
-        var textnode = document.createTextNode(restaurant);
-        listButton.appendChild(textnode);
-        newListing.appendChild(listButton);
-        var sidebar = document.getElementById("sidebar");
-        sidebar.insertBefore(newListing, sidebar.childNodes[i]);
-      } 
-    }); 
-  },
+    	// Using Foursquare, place 10 markers matching query.
+     	$.getJSON(query, function(data) {
+      		var results = data.response.venues;
+      		for (var i = 0; i < results.length; i++) {
+        		var result = results[i];
+        		var position = result.location;
+        		var title = result.name;
+        		var foursquareID = result.id;
+        		var marker = new google.maps.Marker({
+          			position: position,
+          			title: title,
+          			animation: google.maps.Animation.DROP,
+          			id: i,
+          			foursquareID: foursquareID
+        		});
+        		markers.push(marker);
+        		marker.addListener('click', function() {
+          			view.prepareInfoWindow(this, largeInfowindow);
+        		});
+      		}
+      		view.populateSidebar(markers);
+    	});
+	},
+
+    //myLocationsFilter: ko.computed(function() {
+    //    var result = [];
+    //    for (var i = 0; i < markers.length; i++) {
+    //        var markerLocation = markers[i];
+    //        if (markerLocation.title.toLowerCase().includes(searchOption()
+    //                .toLowerCase())) {
+    //            result.push(markerLocation);
+    //            markers[i].setVisible(true);
+    //        } else {
+    //            markers[i].setVisible(false);
+    //        }
+    //    }
+    //    return result;
+    //}, ); 
   foursquareVenue: function(id, infowindow, marker) {
       var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + 
       '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
@@ -102,21 +109,26 @@ var model = {
     },
 }
 
-// ========== VIEWMODEL ===========
-var viewmodel = {
-
-}
-
 // ============ VIEW ==============
 var view = {
 	showListings: function() {
-  		var bounds = new google.maps.LatLngBounds();
-  		// Extend the boundaries of the map for each marker and display the marker
-  		for (var i = 0; i < markers.length; i++) {
-    		markers[i].setMap(map);
-    		bounds.extend(markers[i].position);
-  		}
-  		map.fitBounds(bounds);
+    //console.log('Before: ' + this.searchEntry);
+    //this.searchEntry = ko.observable('');
+    //console.log('After: ' + this.searchEntry());
+  	var bounds = new google.maps.LatLngBounds();
+  	// Extend the boundaries of the map for each marker and display the marker
+  	for (var i = 0; i < markers.length; i++) {
+    	if (markers[i].title.toLowerCase().includes(searchEntry().toLowerCase())) {
+        markers[i].setMap(map);
+        markers[i].setVisible(true);
+      } else {
+        markers[i].setMap(map);
+        markers[i].setVisible(false);
+      }
+      //markers[i].setMap(map);
+    	bounds.extend(markers[i].position);
+  	}
+  	map.fitBounds(bounds);
 	},
 
 	// This function will loop through the listings and hide them all.
@@ -144,10 +156,25 @@ var view = {
     		infowindow.addListener('closeclick', function() {
       			infowindow.marker = null;
     		});
-    		// *** Todo: Query Foursquare for details
     		model.foursquareVenue(marker.foursquareID, infowindow, marker);
 		}
 	},
+  populateSidebar: function(markers) {
+      for (var i = 0; i < markers.length; i++) {
+          // Create a listing per restaurant, and add it to the sidebar.
+          restaurant = markers[i].title;
+          restNum = i;
+          var newListing = document.createElement("div");
+          var listButton = document.createElement("button");
+          listButton.setAttribute("onclick", "view.selectOne(" + restNum + ")");
+          var textnode = document.createTextNode(restaurant);
+          listButton.appendChild(textnode);
+          newListing.appendChild(listButton);
+          var sidebar = document.getElementById("sidebar");
+          sidebar.insertBefore(newListing, sidebar.childNodes[i]);
+        } 
+    },
+
 	// Sidebar buttons to 'show' and 'hide' markers.
 	sidebarButtons: function() {
 	document.getElementById('show-listings').addEventListener('click', view.showListings);
@@ -155,8 +182,8 @@ var view = {
 	},
 }
 
-// Initialize the map, calling Foursquare to populate restaurant listings. Enable sidebar buttons.
-
-//model.populateRestaurants(initialURL);
-//view.sidebarButtons();
-
+// Let's get started by initializing our viewmodel using Knockout
+function getStarted() {
+  ko.applyBindings(viewModel);
+  viewModel.initMap();
+};
