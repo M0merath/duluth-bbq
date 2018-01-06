@@ -8,29 +8,47 @@ var markers = [];
 // Store the Foursqare client ID and secret for future reference
 var client_id = 'SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE';
 var client_secret = 'QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR';
-var searchEntry = null;
 
 // Search for Korean BBQ restaurants in Duluth, GA using Foursquare
 var initialURL = 'https://api.foursquare.com/v2/venues/search?' + 
 'v=20161016&ll=33.958681%2C%20-84.1363947&radius=2000&query=Korean%20BBQ' + 
 '&limit=10&intent=browse&client_id=' + client_id + '&client_secret=' + client_secret
 
-var viewModel = {
-  // Initialize the map within the div
-  initMap: function() {
-    searchEntry = ko.observable('');
-    map = new google.maps.Map(document.getElementById('map'), {
-		center: {lat: 33.958681, lng: -84.1363947},
-		zoom: 15
-	});
-	// Create an infowindow to display when a marker is clicked
-	largeInfowindow = new google.maps.InfoWindow();
+function viewModel() {
+  var self = this;
+
+  this.searchEntry = ko.observable('');
 
 	model.populateRestaurants(initialURL);
 	//view.showListings();
 	view.sidebarButtons();
   }
-}
+  this.searchFilter = ko.computed(function() {
+    console.log(searchEntry);
+    var result = [];
+    for (var i = 0; i < markers.length; i++) {
+      var marker = markers[i];
+      if (marker.title.toLowerCase().includes(searchEntry().toLowerCase())) {
+        result.push(marker);
+        this.markers[i].setVisible(true);
+      } else {
+        this.markers[i].setVisible(false);
+      }
+    }
+    console.log(result);
+    return result;
+  }, this);
+  // Initialize the map within the div
+  this.initMap = function() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 33.958681, lng: -84.1363947},
+      zoom: 15
+    });
+  // Create an infowindow to display when a marker is clicked
+  this.largeInfowindow = new google.maps.InfoWindow();
+  }
+
+  this.initMap();
 
 // ============ MODEL =============
 var model = {
@@ -56,24 +74,10 @@ var model = {
           			view.prepareInfoWindow(this, largeInfowindow);
         		});
       		}
-      		view.populateSidebar(markers);
+      		//view.populateSidebar(markers);
     	});
 	},
 
-    //myLocationsFilter: ko.computed(function() {
-    //    var result = [];
-    //    for (var i = 0; i < markers.length; i++) {
-    //        var markerLocation = markers[i];
-    //        if (markerLocation.title.toLowerCase().includes(searchOption()
-    //                .toLowerCase())) {
-    //            result.push(markerLocation);
-    //            markers[i].setVisible(true);
-    //        } else {
-    //            markers[i].setVisible(false);
-    //        }
-    //    }
-    //    return result;
-    //}, ); 
   foursquareVenue: function(id, infowindow, marker) {
       var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + 
       '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
@@ -159,11 +163,14 @@ var view = {
     		model.foursquareVenue(marker.foursquareID, infowindow, marker);
 		}
 	},
+
   populateSidebar: function(markers) {
-      for (var i = 0; i < markers.length; i++) {
-          // Create a listing per restaurant, and add it to the sidebar.
-          restaurant = markers[i].title;
-          restNum = i;
+    for (var i = 0; i < markers.length; i++) {
+      // Create a listing per restaurant, and add it to the sidebar.
+      restaurant = markers[i].title;
+      restNum = i;
+      if (searchEntry != "") {
+        if (restaurant.toLowerCase().includes(searchEntry().toLowerCase())) {
           var newListing = document.createElement("div");
           var listButton = document.createElement("button");
           listButton.setAttribute("onclick", "view.selectOne(" + restNum + ")");
@@ -171,9 +178,11 @@ var view = {
           listButton.appendChild(textnode);
           newListing.appendChild(listButton);
           var sidebar = document.getElementById("sidebar");
-          sidebar.insertBefore(newListing, sidebar.childNodes[i]);
-        } 
-    },
+          sidebar.insertBefore(newListing, sidebar.childNodes[i]);          
+        }
+      }
+    }
+  },
 
 	// Sidebar buttons to 'show' and 'hide' markers.
 	sidebarButtons: function() {
@@ -184,6 +193,5 @@ var view = {
 
 // Let's get started by initializing our viewmodel using Knockout
 function getStarted() {
-  ko.applyBindings(viewModel);
-  viewModel.initMap();
+  ko.applyBindings(new viewModel());
 };
