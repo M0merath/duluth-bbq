@@ -28,7 +28,7 @@ function viewModel() {
     });
     // Create an infowindow to display when a marker is clicked
   	this.largeInfowindow = new google.maps.InfoWindow();
-    populateRestaurants(initialURL, this.markers);
+    populateRestaurants(initialURL, this.markers, this.largeInfowindow);
   }
 
   this.searchFilter = ko.computed(function() {
@@ -47,7 +47,7 @@ function viewModel() {
     return result;
   }, this);
 
-  function populateRestaurants(query, markers) {
+  function populateRestaurants(query, markers, infowindow) {
   // Using Foursquare, place 10 markers matching query.
     $.getJSON(query, function(data) {
       var results = data.response.venues;
@@ -66,8 +66,9 @@ function viewModel() {
         this.marker.setMap(map);
         markers.push(this.marker);
         this.marker.addListener('click', function() {
-          view.prepareInfoWindow(this, largeInfowindow);
+          prepareInfoWindow(this, infowindow);
         });
+        
       }
     });
   }
@@ -75,20 +76,75 @@ function viewModel() {
     var bounds = new google.maps.LatLngBounds();
     // Extend the boundaries of the map for each marker and display the marker
     for (var i = 0; i < restaurants.length; i++) {
-      if (restaurants[i].title.toLowerCase().includes(searchEntry().toLowerCase())) {
         restaurants[i].setMap(map);
         restaurants[i].setVisible(true);
+        restaurants[i].addListener('click', selectOne(markers[i]));
         bounds.extend(restaurants[i].position);
         console.log(restaurants[i].title.toLowerCase());
-      }
     }
     map.fitBounds(bounds);
   }
+
+  function selectOne(selection) {
+    google.maps.event.trigger(map, "resize");
+    map.panTo(selection.getPosition());
+    map.setZoom(16);
+  }
+
+  function prepareInfoWindow(marker, infowindow) {
+      // Check to make sure the infowindow is not already opened on this marker.
+      if (infowindow.marker != marker) {
+        // Clear the infowindow content to give the Foursquare API time to load.
+        infowindow.setContent('');
+        infowindow.marker = marker;
+        // Make sure the marker property is cleared if the infowindow is closed.
+        infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+        });
+        foursquareVenue(marker.foursquareID, infowindow, marker);
+    }
+  }
+
+  function foursquareVenue(id, infowindow, marker) {
+      var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + 
+      '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
+      $.getJSON(foursquareURL, function(data) {
+        var results = data.response.venue;
+        // Is there a listed phone number for this venue?
+        if (results.contact.formattedPhone != undefined) {
+          var phoneContact = results.contact.formattedPhone;
+        } else {
+          var phoneContact = 'none listed';
+        }
+        // Is there a rating for this venue?
+        if (results.rating != undefined) {
+          var venueRating = results.rating;
+        } else {
+          var venueRating = 'n/a';
+        }
+        infowindow.setContent(
+          '<div>' + 
+          '<div style="width: 105px; float: left; display: inline-block;">' + 
+          '<span>' + '<img src="' + results.bestPhoto.prefix + 'width100' + results.bestPhoto.suffix + '"></span>' + 
+          '</div>' + 
+          '<div style="width: 200px; float: left; display: inline-block">' + 
+          '<span>' + '<strong>' + results.name + '</strong></span><br>' + 
+          '<span>' + '<strong>Rating: </strong>' + venueRating + '</span>' + '&emsp;' +  
+          '<span>' + '<strong>Price: </strong>' + results.price.tier + '</span><br>' + 
+          '<span>' + '<strong>Address: </strong><br>' + results.location.formattedAddress + '</span><br>' + 
+          '<span>' + '<strong>Phone: </strong>' + phoneContact + '</span>' + 
+          '</div>' + 
+          '</div>');
+      });
+      infowindow.open(map, marker);
+    }
+
   this.initMap();
 }
 
 
-// Let's get started by initializing our viewmodel using Knockout
+
+// Get started by initializing our viewmodel using Knockout
 function getStarted() {
   ko.applyBindings(new viewModel());
   //viewModel();

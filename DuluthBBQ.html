@@ -17,7 +17,7 @@
         </div>
         <div class="sidebar">
           <ul id="sidebar" data-bind="foreach: searchFilter">
-          	<li id="restaurant" data-bind="text: title"></li>
+          	<a href="#"><li id="restaurant" data-bind="text: title, click: $parent.selectOne"></li></a>
           </ul>
         </div>
       </div>
