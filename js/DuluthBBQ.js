@@ -65,10 +65,8 @@ function viewModel() {
         });
         this.marker.setMap(map);
         markers.push(this.marker);
-        this.marker.addListener('click', function() {
-          prepareInfoWindow(this, infowindow);
-        });
-        
+        this.marker.addListener('click', self.bounceMarker);
+          //prepareInfoWindow(this, infowindow);     
       }
     });
   }
@@ -91,7 +89,7 @@ function viewModel() {
     map.setZoom(16);
   }
 
-  function prepareInfoWindow(marker, infowindow) {
+  this.prepareInfoWindow = function(marker, infowindow) {
       // Check to make sure the infowindow is not already opened on this marker.
       if (infowindow.marker != marker) {
         // Clear the infowindow content to give the Foursquare API time to load.
@@ -103,6 +101,13 @@ function viewModel() {
         });
         foursquareVenue(marker.foursquareID, infowindow, marker);
     }
+  }
+
+  this.bounceMarker = function() {
+    //console.log('this = ' + JSON.stringify(this));
+    //self.prepareInfoWindow(this, self.largeInfoWindow);
+    map.panTo(this.getPosition());
+    this.setAnimation(google.maps.Animation.BOUNCE);
   }
 
   function foursquareVenue(id, infowindow, marker) {
