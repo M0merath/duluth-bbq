@@ -67,6 +67,8 @@ function viewModel() {
         markers.push(this.marker);
         this.marker.addListener('click', self.bounceMarker); 
       }
+    }).fail(function() {
+      alert('Could not load Foursquare API. Please check your connection and try again.');
     });
   }
 
@@ -125,6 +127,8 @@ function viewModel() {
           '<span>' + '<strong>Phone: </strong>' + phoneContact + '</span>' + 
           '</div>' + 
           '</div>');
+      }).fail(function() {
+        alert('Could not load the Foursquare API. Please check your connection and try again.');
       });
       infowindow.open(map, marker);
     }
