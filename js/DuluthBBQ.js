@@ -32,9 +32,6 @@ function viewModel() {
 
   }
 
-  
-  //setTimeout(this.searchFilter, 1400);
-
   this.searchFilter = ko.computed(function() {
     this.searchEntry();
     var result = [];
@@ -45,9 +42,8 @@ function viewModel() {
         this.markers[i].setVisible(true);
       } else {
         this.markers[i].setVisible(false);
-      }
-    }
-    console.log(result);
+      }  
+    } 
     return result;
   }, this);
 
@@ -69,8 +65,7 @@ function viewModel() {
         });
         this.marker.setMap(map);
         markers.push(this.marker);
-        this.marker.addListener('click', self.bounceMarker);
-          //prepareInfoWindow(this, infowindow);     
+        this.marker.addListener('click', self.bounceMarker); 
       }
     });
   }
@@ -85,15 +80,19 @@ function viewModel() {
         infowindow.addListener('closeclick', function() {
             infowindow.marker = null;
         });
+        console.log(marker.foursquareID);
+        console.log(infowindow);
+        console.log(marker);
         foursquareVenue(marker.foursquareID, infowindow, marker);
     }
   }
 
   this.bounceMarker = function() {
-    // Pan to selected marker and set to bounce.
+    // Pan to selected marker and set to bounce twice.
     map.panTo(this.getPosition());
     this.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout((function() { this.setAnimation(null); }).bind(this), 1400);
+    self.prepareInfoWindow(this, self.largeInfowindow);
   }
 
   function foursquareVenue(id, infowindow, marker) {
