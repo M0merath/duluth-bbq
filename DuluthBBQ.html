@@ -13,7 +13,7 @@
       <h2>Korean BBQ in Duluth, GA</h2>
       <div>
         <div class="searchbar" id="searchbar">
-          <input type="text" placeholder="Search by name" name="search" data-bind="textInput: searchEntry, valueUpdate: 'afterkeydown'">
+          <input type="text" placeholder="Search by name" name="search" id="search" data-bind="textInput: searchEntry">
         </div>
         <div class="sidebar">
           <ul id="sidebar" data-bind="foreach: searchFilter">
@@ -26,8 +26,8 @@
 <!-- The map -->
 	<div id="map"></div>
 	<script src="js/libs/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
 	<script src="js/DuluthBBQ.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
 	<!-- Call the Google Maps API. -->
 	<script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCK9oBT1vADTLkfMwPTxYxrrScY-kJEQHs&libraries=geometry&callback=getStarted"></script>
 </body>

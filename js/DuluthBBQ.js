@@ -18,7 +18,7 @@ var initialURL = 'https://api.foursquare.com/v2/venues/search?' +
 function viewModel() {
   var self = this;
 
-  this.searchEntry = ko.observable("");
+  this.searchEntry = ko.observable(null);
   this.markers = [];
   // Initialize the map within the div
   this.initMap = function() {
@@ -29,10 +29,14 @@ function viewModel() {
     // Create an infowindow to display when a marker is clicked
   	this.largeInfowindow = new google.maps.InfoWindow();
     populateRestaurants(initialURL, this.markers, this.largeInfowindow);
+
   }
 
+  
+  //setTimeout(this.searchFilter, 1400);
+
   this.searchFilter = ko.computed(function() {
-    console.log('searchFilter has been called: ' + this.searchEntry());
+    this.searchEntry();
     var result = [];
     for (var i = 0; i < this.markers.length; i++) {
       var marker = this.markers[i];
@@ -70,24 +74,6 @@ function viewModel() {
       }
     });
   }
-  function showListings(restaurants) {
-    var bounds = new google.maps.LatLngBounds();
-    // Extend the boundaries of the map for each marker and display the marker
-    for (var i = 0; i < restaurants.length; i++) {
-        restaurants[i].setMap(map);
-        restaurants[i].setVisible(true);
-        restaurants[i].addListener('click', selectOne(markers[i]));
-        bounds.extend(restaurants[i].position);
-        console.log(restaurants[i].title.toLowerCase());
-    }
-    map.fitBounds(bounds);
-  }
-
-  function selectOne(selection) {
-    google.maps.event.trigger(map, "resize");
-    map.panTo(selection.getPosition());
-    map.setZoom(16);
-  }
 
   this.prepareInfoWindow = function(marker, infowindow) {
       // Check to make sure the infowindow is not already opened on this marker.
@@ -104,10 +90,10 @@ function viewModel() {
   }
 
   this.bounceMarker = function() {
-    //console.log('this = ' + JSON.stringify(this));
-    //self.prepareInfoWindow(this, self.largeInfoWindow);
+    // Pan to selected marker and set to bounce.
     map.panTo(this.getPosition());
     this.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout((function() { this.setAnimation(null); }).bind(this), 1400);
   }
 
   function foursquareVenue(id, infowindow, marker) {
