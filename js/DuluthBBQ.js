@@ -12,7 +12,7 @@ var client_secret = 'QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR';
 // Search for Korean BBQ restaurants in Duluth, GA using Foursquare
 var initialURL = 'https://api.foursquare.com/v2/venues/search?' + 
 'v=20161016&ll=33.958681%2C%20-84.1363947&radius=2000&query=Korean%20BBQ' + 
-'&limit=10&intent=browse&client_id=' + client_id + '&client_secret=' + client_secret
+'&limit=10&intent=browse&client_id=' + client_id + '&client_secret=' + client_secret;
 
 // ========= VIEWMODEL ===========
 function viewModel() {
@@ -30,7 +30,7 @@ function viewModel() {
   	this.largeInfowindow = new google.maps.InfoWindow();
     populateRestaurants(initialURL, this.markers, this.largeInfowindow);
 
-  }
+  };
 
   this.searchFilter = ko.computed(function() {
     this.searchEntry();
@@ -87,7 +87,7 @@ function viewModel() {
         console.log(marker);
         foursquareVenue(marker.foursquareID, infowindow, marker);
     }
-  }
+  };
 
   this.bounceMarker = function() {
     // Pan to selected marker and set to bounce twice.
@@ -95,7 +95,7 @@ function viewModel() {
     this.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout((function() { this.setAnimation(null); }).bind(this), 1400);
     self.prepareInfoWindow(this, self.largeInfowindow);
-  }
+  };
 
   function foursquareVenue(id, infowindow, marker) {
       var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + 
@@ -103,16 +103,18 @@ function viewModel() {
       $.getJSON(foursquareURL, function(data) {
         var results = data.response.venue;
         // Is there a listed phone number for this venue?
-        if (results.contact.formattedPhone != undefined) {
-          var phoneContact = results.contact.formattedPhone;
+        var phoneContact = '';
+        if (results.contact.formattedPhone !== undefined) {
+          phoneContact = results.contact.formattedPhone;
         } else {
-          var phoneContact = 'none listed';
+          phoneContact = 'none listed';
         }
         // Is there a rating for this venue?
-        if (results.rating != undefined) {
-          var venueRating = results.rating;
+        var venueRating = '';
+        if (results.rating !== undefined) {
+          venueRating = results.rating;
         } else {
-          var venueRating = 'n/a';
+          venueRating = 'n/a';
         }
         infowindow.setContent(
           '<div>' + 
