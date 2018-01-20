@@ -11,11 +11,6 @@
         position: relative;
     }
 
-    #hide-listings,
-    #show-listings {
-        width: 48%;
-    }
-
 	#map {
 		bottom:0px;
         height: 100%;
@@ -23,7 +18,9 @@
         position: absolute;
         right: 0px;
 	}
-
+    h2 {
+        color: #fff;
+    }
 	.options-box {
         background: #fff;
         border: 1px solid #999;
@@ -32,5 +29,12 @@
         line-height: 35px;
         padding: 10px 10px 30px 10px;
         text-align: left;
+        height: 100%;
         width: 340px;
+        position: fixed;
+        z-index: 1;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
       }

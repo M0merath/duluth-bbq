@@ -97,6 +97,14 @@ function viewModel() {
     self.prepareInfoWindow(this, self.largeInfowindow);
   };
 
+  function sidebarClose() {
+    document.getElementById("options-box").style.width = "40px";
+  }
+
+  function sidebarOpen() {
+    document.getElementById("options-box").style.display = "block";
+  }
+
   function foursquareVenue(id, infowindow, marker) {
       var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + 
       '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
