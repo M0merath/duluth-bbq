@@ -4,7 +4,7 @@
 var map;
 // Create an empty array of markers
 //var markers = [];
-
+//var sidebarToggle = false;
 // Store the Foursqare client ID and secret for future reference
 var client_id = 'SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE';
 var client_secret = 'QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR';
@@ -17,7 +17,7 @@ var initialURL = 'https://api.foursquare.com/v2/venues/search?' +
 // ========= VIEWMODEL ===========
 function viewModel() {
   var self = this;
-
+  this.sidebarToggle = ko.observable(false);
   this.searchEntry = ko.observable(null);
   this.markers = [];
   // Initialize the map within the div
@@ -97,12 +97,19 @@ function viewModel() {
     self.prepareInfoWindow(this, self.largeInfowindow);
   };
 
-  function sidebarClose() {
-    document.getElementById("options-box").style.width = "40px";
+  sidebarShrink = function() {
+    this.sidebarToggle = !this.sidebarToggle;
+    console.log('this.sidebarToggle = ' + this.sidebarToggle);
+    if (this.sidebarToggle = true) {
+      document.getElementById("options-box").style.width = "40px";
+    } else {
+      document.getElementById("options-box").style.width = "340px";
+    }
   }
 
-  function sidebarOpen() {
-    document.getElementById("options-box").style.display = "block";
+  sidebarExpand = function() {
+    document.getElementById("options-box").style.width = "340px";
+    //document.getElementById("options-box").style.display = "block";
   }
 
   function foursquareVenue(id, infowindow, marker) {
