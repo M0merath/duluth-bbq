@@ -38,3 +38,12 @@
         transition: 0.5s;
         padding-top: 60px;
       }
+    .shrunk {
+        width: 40px;
+    }
+
+    @media only screen and (max-width: 750px) {
+        .options-box {
+            width: 500px;
+        }
+    }

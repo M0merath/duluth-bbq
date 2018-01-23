@@ -17,7 +17,7 @@ var initialURL = 'https://api.foursquare.com/v2/venues/search?' +
 // ========= VIEWMODEL ===========
 function viewModel() {
   var self = this;
-  this.sidebarToggle = ko.observable(false);
+  this.shrink = ko.observable(false);
   this.searchEntry = ko.observable(null);
   this.markers = [];
   // Initialize the map within the div
@@ -97,15 +97,18 @@ function viewModel() {
     self.prepareInfoWindow(this, self.largeInfowindow);
   };
 
-  sidebarShrink = function() {
-    this.sidebarToggle = !this.sidebarToggle;
-    console.log('this.sidebarToggle = ' + this.sidebarToggle);
-    if (this.sidebarToggle = true) {
-      document.getElementById("options-box").style.width = "40px";
-    } else {
-      document.getElementById("options-box").style.width = "340px";
-    }
-  }
+  this.sidebarToggle = function() {
+    this.shrink (!this.shrink())
+  };
+
+
+//    console.log('this.sidebarToggle = ' + this.sidebarToggle);
+//    if (this.sidebarToggle = true) {
+//      document.getElementById("options-box").style.width = "40px";
+//    } else {
+//      document.getElementById("options-box").style.width = "340px";
+//    }
+//  }
 
   sidebarExpand = function() {
     document.getElementById("options-box").style.width = "340px";

@@ -9,8 +9,8 @@
 
 <!-- The listings sidebar -->
 	<div class="container">
-    <div class="options-box" id="options-box">
-      <button class="close-btn" data-bind="click: sidebarShrink">&times;</button>
+    <div class="options-box" id="options-box" data-bind="css: {shrunk: shrink}">
+      <button class="close-btn" data-bind="click: sidebarToggle">+/-</button>
       <h2>Korean BBQ in Duluth, GA</h2>
       <div>
         <div class="searchbar" id="searchbar">
