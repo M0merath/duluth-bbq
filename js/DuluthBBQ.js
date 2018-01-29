@@ -24,12 +24,12 @@ function viewModel() {
     {
         title: "Gogi House Korean BBQ",
         position: {lat: 33.95789865686565, lng: -84.12795238216701},
-        id: "4c42be9acc410f47864cad61"
+        id: "550f4e8d498e50a8c9268af0"
     },
     {
         title: "Korean BBQ Restaurant",
         position: {lat: 33.96422437114562, lng: -84.14015125396773},
-        id: "4c42be9acc410f47864cad61"
+        id: "4cc236073d7fa1cdf1889d5f"
     },
     {
         title: "Pirate's Korean Seafood BBQ",
@@ -68,10 +68,7 @@ function viewModel() {
       var restaurant = this.locations[i];
       if (restaurant.title.toLowerCase().includes(this.searchEntry().toLowerCase())) {
         result.push(restaurant);
-        //this.markers[i].setVisible(true);
-      } else {
-        //this.markers[i].setVisible(false);
-      }  
+      }
     } 
     return result;
   }, this);
@@ -82,7 +79,6 @@ function viewModel() {
       var position = location.position;
       var title = location.title;
       var foursquareID = location.id;
-      console.log(title);
       this.marker = new google.maps.Marker({
         position: position,
         title: title,
@@ -158,7 +154,6 @@ function viewModel() {
   }
 
   function foursquareVenue(id, infowindow, marker) {
-    console.log(json.stringify(marker));
     var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + 
     '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
     $.getJSON(foursquareURL, function(data) {
@@ -170,6 +165,7 @@ function viewModel() {
       } else {
         phoneContact = 'none listed';
       }
+      phoneContact = results.contact.formattedPhone || 'none listed';
       // Is there a rating for this venue?
       var venueRating = '';
       if (results.rating !== undefined) {
