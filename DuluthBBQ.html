@@ -14,11 +14,11 @@
       <h2>Korean BBQ in Duluth, GA</h2>
       <div>
         <div class="searchbar" id="searchbar">
-          <input type="text" placeholder="Type here to filter results" name="search" id="search" data-bind="textInput: searchEntry">
+          <input type="text" placeholder="Type here to filter results" name="search" id="search" data-bind="textInput: searchEntry, valueUpdate: 'afterkeydown'">
         </div>
         <div class="sidebar">
           <ul id="sidebar" data-bind="foreach: searchFilter">
-          	<a href="#"><li id="restaurant" data-bind="text: title, click: $parent.bounceMarker"></li></a>
+          	<a href="#"><li id="restaurant" data-bind="text: title, click: $parent.sidebarBounce"></li></a>
           </ul>
         </div>
       </div>

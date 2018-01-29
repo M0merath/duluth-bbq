@@ -17,31 +17,37 @@ function viewModel() {
   this.shrink = ko.observable(false);
   this.locations = [
     {
+        number: 0,
         title: "9292 Korean BBQ",
         position: {lat: 33.96400557487093, lng: -84.12699697604353},
         id: "588638c3266c11339c3c4905"
     },
     {
+        number: 1,
         title: "Gogi House Korean BBQ",
         position: {lat: 33.95789865686565, lng: -84.12795238216701},
         id: "550f4e8d498e50a8c9268af0"
     },
     {
+        number: 2,
         title: "Korean BBQ Restaurant",
         position: {lat: 33.96422437114562, lng: -84.14015125396773},
         id: "4cc236073d7fa1cdf1889d5f"
     },
     {
+        number: 3,
         title: "Pirate's Korean Seafood BBQ",
         position: {lat: 33.962666, lng: -84.134141},
         id: "57a8b5a5498e607ed7b06c99"
     },
     {
+        number: 4,
         title: "Seo Ra Beol Restaurant",
         position: {lat: 33.963875612891165, lng: -84.14196439914087},
         id: "4bce7684b6c49c7410529791"
     },
     {
+        number: 5,
         title: "JM BBQ & Bar",
         position: {lat: 33.960246, lng: -84.134089},
         id: "5753410dcd1030575b527acf"
@@ -120,7 +126,7 @@ function viewModel() {
     });
   }
 
-  this.prepareInfoWindow = function(marker, infowindow) {
+  prepareInfoWindow = function(marker, infowindow) {
       // Check to make sure the infowindow is not already opened on this marker.
       if (infowindow.marker != marker) {
         // Clear the infowindow content to give the Foursquare API time to load.
@@ -130,19 +136,26 @@ function viewModel() {
         infowindow.addListener('closeclick', function() {
             infowindow.marker = null;
         });
-        console.log(marker.foursquareID);
-        console.log(infowindow);
-        console.log(marker);
         foursquareVenue(marker.foursquareID, infowindow, marker);
     }
   };
+
+  this.sidebarBounce = function() {
+    var marker = markers[this.number];
+    map.panTo(marker.getPosition());
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout((function() {marker.setAnimation(null);}).bind(marker), 1400);
+    prepareInfoWindow(marker, self.largeInfowindow);
+  }
 
   this.bounceMarker = function() {
     // Pan to selected marker and set to bounce twice.
     map.panTo(this.getPosition());
     this.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout((function() { this.setAnimation(null); }).bind(this), 1400);
-    self.prepareInfoWindow(this, self.largeInfowindow);
+    console.log(this);
+    console.log(self.largeInfowindow);
+    prepareInfoWindow(this, self.largeInfowindow);
   };
 
   this.sidebarToggle = function() {
