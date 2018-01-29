@@ -153,8 +153,6 @@ function viewModel() {
     map.panTo(this.getPosition());
     this.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout((function() { this.setAnimation(null); }).bind(this), 1400);
-    console.log(this);
-    console.log(self.largeInfowindow);
     prepareInfoWindow(this, self.largeInfowindow);
   };
 
@@ -205,6 +203,10 @@ function viewModel() {
     infowindow.open(map, marker);
   }
   this.initMap();
+}
+
+function googleError() {
+  alert('Could not load Google Maps API. Please check your connection and credentials.');
 }
 
 
