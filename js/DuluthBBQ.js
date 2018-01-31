@@ -98,34 +98,6 @@ function viewModel() {
     }
   }
 
-  function populateRestaurants(query, markers, infowindow) {
-  // Using Foursquare, place 10 markers matching query.
-    $.getJSON(query, function(data) {
-      var results = data.response.venues;
-      for (var i = 0; i < results.length; i++) {
-        var result = results[i];
-        var position = result.location;
-        var title = result.name;
-        var foursquareID = result.id;
-        console.log(position);
-        console.log(title);
-        console.log(foursquareID);
-        this.marker = new google.maps.Marker({
-          position: position,
-          title: title,
-          animation: google.maps.Animation.DROP,
-          id: i,
-          foursquareID: foursquareID
-        });
-        this.marker.setMap(map);
-        markers.push(this.marker);
-        this.marker.addListener('click', self.bounceMarker); 
-      }
-    }).fail(function() {
-      alert('Could not load Foursquare API. Please check your connection and try again.');
-    });
-  }
-
   prepareInfoWindow = function(marker, infowindow) {
       // Check to make sure the infowindow is not already opened on this marker.
       if (infowindow.marker != marker) {
@@ -146,7 +118,7 @@ function viewModel() {
     marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout((function() {marker.setAnimation(null);}).bind(marker), 1400);
     prepareInfoWindow(marker, self.largeInfowindow);
-  }
+  };
 
   this.bounceMarker = function() {
     // Pan to selected marker and set to bounce twice.
@@ -157,12 +129,12 @@ function viewModel() {
   };
 
   this.sidebarToggle = function() {
-    this.shrink (!this.shrink())
+    this.shrink (!this.shrink());
   };
 
   sidebarExpand = function() {
     document.getElementById("options-box").style.width = "340px";
-  }
+  };
 
   function foursquareVenue(id, infowindow, marker) {
     var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + 
