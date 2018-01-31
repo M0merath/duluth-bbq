@@ -2,14 +2,9 @@
 
 // Create a Google Map variable
 var map;
-// Store the Foursqare client ID and secret for future reference
+// Store the Foursquare client ID and secret for future reference
 var client_id = 'SFLIZ3Z0VXO4TXM5C3UUUUETPD4ZZIO5QE1O2LKLHTXLBDUE';
 var client_secret = 'QC4XDEDAHXXEYRLTFEHAMD1APQDQOJLIQZMPTEFGEPFEKYNR';
-
-// Search for Korean BBQ restaurants in Duluth, GA using Foursquare
-//var initialURL = 'https://api.foursquare.com/v2/venues/search?' + 
-//'v=20161016&ll=33.958681%2C%20-84.1363947&radius=2000&query=Korean%20BBQ' + 
-//'&limit=10&intent=browse&client_id=' + client_id + '&client_secret=' + client_secret;
 
 // ========= VIEWMODEL ===========
 function viewModel() {
@@ -67,6 +62,7 @@ function viewModel() {
     dropMarkers(this.locations);
   };
 
+  // This Knockout.js function updates locations list based on a text filter.
   this.searchFilter = ko.computed(function() {
     this.searchEntry();
     var result = [];
@@ -79,6 +75,7 @@ function viewModel() {
     return result;
   }, this);
 
+  // Turn locations array into map markers, and push to map.
   function dropMarkers(locations) {
     for (var i = 0; i < locations.length; i++) {
       var location = locations[i];
@@ -112,6 +109,7 @@ function viewModel() {
     }
   };
 
+  // Same as bounceMarker below, but connecting the sidebar listing to its marker.
   this.sidebarBounce = function() {
     var marker = markers[this.number];
     map.panTo(marker.getPosition());
@@ -128,6 +126,7 @@ function viewModel() {
     prepareInfoWindow(this, self.largeInfowindow);
   };
 
+  // If sidebar button is pressed, shrink or expand the sidebar.
   this.sidebarToggle = function() {
     this.shrink (!this.shrink());
   };
@@ -136,6 +135,7 @@ function viewModel() {
     document.getElementById("options-box").style.width = "340px";
   };
 
+  // When a marker is selected, Foursquare API finds and loads data.
   function foursquareVenue(id, infowindow, marker) {
     var foursquareURL = 'https://api.foursquare.com/v2/venues/' + id + 
     '?v=20161016&client_id=' + client_id + '&client_secret=' + client_secret;
@@ -177,6 +177,7 @@ function viewModel() {
   this.initMap();
 }
 
+// This function is called by DuluthBBQ.html only if Google API does not load.
 function googleError() {
   alert('Could not load Google Maps API. Please check your connection and credentials.');
 }
