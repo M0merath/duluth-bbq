@@ -70,6 +70,14 @@ function viewModel() {
       var restaurant = this.locations[i];
       if (restaurant.title.toLowerCase().includes(this.searchEntry().toLowerCase())) {
         result.push(restaurant);
+        // Since markers might not have loaded yet, ignore undefined markers.
+        if (markers[i] != undefined) {
+          markers[i].setVisible(true);
+        }
+      } else {
+        if (markers[i] != undefined) {
+          markers[i].setVisible(false);
+        }
       }
     } 
     return result;
