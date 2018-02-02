@@ -58,7 +58,6 @@ function viewModel() {
     });
     // Create an infowindow to display when a marker is clicked
   	this.largeInfowindow = new google.maps.InfoWindow();
-    //populateRestaurants(initialURL, this.markers, this.largeInfowindow);
     dropMarkers(this.locations);
   };
 
@@ -103,7 +102,7 @@ function viewModel() {
     }
   }
 
-  prepareInfoWindow = function(marker, infowindow) {
+  function prepareInfoWindow(marker, infowindow) {
       // Check to make sure the infowindow is not already opened on this marker.
       if (infowindow.marker != marker) {
         // Clear the infowindow content to give the Foursquare API time to load.
@@ -115,7 +114,7 @@ function viewModel() {
         });
         foursquareVenue(marker.foursquareID, infowindow, marker);
     }
-  };
+  }
 
   // Same as bounceMarker below, but connecting the sidebar listing to its marker.
   this.sidebarBounce = function() {
@@ -139,9 +138,9 @@ function viewModel() {
     this.shrink (!this.shrink());
   };
 
-  sidebarExpand = function() {
+  function sidebarExpand() {
     document.getElementById("options-box").style.width = "340px";
-  };
+  }
 
   // When a marker is selected, Foursquare API finds and loads data.
   function foursquareVenue(id, infowindow, marker) {

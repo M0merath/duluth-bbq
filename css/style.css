@@ -30,7 +30,7 @@
         padding: 10px 10px 30px 10px;
         text-align: left;
         height: 100%;
-        width: 40%;
+        width: 30%;
         position: fixed;
         z-index: 1;
         background-color: #111;
@@ -44,6 +44,6 @@
 
     @media only screen and (max-width: 750px) {
         .options-box {
-            width: 75%;
+            width: 60%;
         }
     }
